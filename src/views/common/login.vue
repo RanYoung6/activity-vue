@@ -3,11 +3,11 @@
     <div class="site-content__wrapper">
       <div class="site-content">
         <div class="brand-info">
-          <h2 class="brand-info__text">城市消防监控后台管理系统</h2>
-          <p class="brand-info__intro">区域管理、设备分类、设备管理、预计系统、统计报表</p>
+          <h2 class="brand-info__text">学生活动管理系统</h2>
+          <p class="brand-info__intro">——活动申请、活动审批、校园动态——</p>
         </div>
         <div class="login-main">
-          <h3 class="login-title">管理员登录</h3>
+          <h1 class="login-title" align="center">登录</h1>
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
             <el-form-item prop="userName">
               <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
@@ -116,7 +116,7 @@
       width: 100%;
       height: 100%;
       content: "";
-      background-image: url(~@/assets/img/login_bg.jpg);
+      background-image: url(~@/assets/img/loginBg.jpg);
       background-size: cover;
     }
     .site-content__wrapper {
@@ -155,15 +155,16 @@
     }
     .login-main {
       position: absolute;
-      top: 30px;
-      right: 160px;
-      padding: 100px 40px 210px;
+      top: 100px;
+      right: 360px;
+      padding: 50px 40px 100px;
       width: 400px;
-    //  min-height: 100%;
-      background-color: #fff;
+      background: -webkit-linear-gradient(top, rgba(19, 80, 100, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
     }
     .login-title {
-      font-size: 16px;
+      color: #fff;
+      font-weight: normal;
+      letter-spacing: 20px;
     }
     .login-captcha {
       overflow: hidden;
