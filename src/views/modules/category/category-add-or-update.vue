@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-popover="">
   <el-dialog
     :title="saveflag ? '新增' : '修改'"
     :close-on-click-modal="false"
@@ -71,8 +71,8 @@
     },
     methods: {
       init (id) {
-        if(id != undefined && id !=''){
-          this.saveflag = false //修改
+        if (id != undefined && id != '') {
+          this.saveflag = false // 修改
           this.dataForm.categoryId = id
         }
         this.$http({
@@ -80,7 +80,7 @@
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          this.menuList = treeDataTranslate(data.page.list, 'typeId' ,'typePid')
+          this.menuList = treeDataTranslate(data.page.list, 'typeId', 'typePid')
           console.log(this.menuList)
         }).then(() => {
           this.visible = true
@@ -101,7 +101,7 @@
               this.dataForm.typePname = data.cfCategory.typePname
               this.dataForm.typePid = data.cfCategory.typePid
               this.dataForm.typeId = data.cfCategory.typeId
-              console.log("当前操作的是:"+this.dataForm.typeId)
+              console.log('当前操作的是:' + this.dataForm.typeId)
               this.menuListTreeSetCurrentNode()
             })
           }
@@ -110,11 +110,11 @@
       // 菜单树选中
       menuListTreeCurrentChangeHandle (data, node) {
         console.log(data)
-        console.log("data.typeId:"+data.typeId)
+        console.log('data.typeId:' + data.typeId)
         this.dataForm.typePid = data.typeId
         this.dataForm.typePname = data.typeName
-       console.log("this.dataForm.typePid"+this.dataForm.typePid)
-        console.log("this.dataForm.typePid"+data.typeName)
+        console.log('this.dataForm.typePid' + this.dataForm.typePid)
+        console.log('this.dataForm.typePid' + data.typeName)
       },
       // 菜单树设置当前选中节点 主要用在修改
       menuListTreeSetCurrentNode () {
@@ -123,16 +123,16 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
-          console.log("this.dataForm："+this.dataForm.typeName)
-          console.log("this.dataForm："+this.dataForm.typePid)
-          console.log("this.dataForm："+this.dataForm.typePname)
+          console.log('this.dataForm：' + this.dataForm.typeName)
+          console.log('this.dataForm：' + this.dataForm.typePid)
+          console.log('this.dataForm：' + this.dataForm.typePname)
           if (valid) {
             this.$http({
               url: this.$http.adornUrl(`/category/${this.saveflag ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'categoryId': this.dataForm.categoryId,
-                'typeId':  this.dataForm.typeId,
+                'typeId': this.dataForm.typeId,
                 'typeName': this.dataForm.typeName,
                 'typePid': this.dataForm.typePid,
                 'typePname': this.dataForm.typePname

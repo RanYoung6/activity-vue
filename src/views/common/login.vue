@@ -9,8 +9,8 @@
         <div class="login-main">
           <h1 class="login-title" align="center">登录</h1>
           <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-            <el-form-item prop="userName">
-              <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+            <el-form-item prop="account">
+              <el-input v-model="dataForm.account" placeholder="帐号"></el-input>
             </el-form-item>
             <el-form-item prop="password">
               <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
@@ -42,13 +42,13 @@
     data () {
       return {
         dataForm: {
-          userName: '',
+          account: '',
           password: '',
           uuid: '',
           captcha: ''
         },
         dataRule: {
-          userName: [
+          account: [
             { required: true, message: '帐号不能为空', trigger: 'blur' }
           ],
           password: [
@@ -73,7 +73,7 @@
               url: this.$http.adornUrl('/sys/login'),
               method: 'post',
               data: this.$http.adornData({
-                'username': this.dataForm.userName,
+                'account': this.dataForm.account,
                 'password': this.dataForm.password,
                 'uuid': this.dataForm.uuid,
                 'captcha': this.dataForm.captcha

@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import ShowEquipmentInfo from  './equipment-info'
+  import ShowEquipmentInfo from './activity-info'
   export default {
     data () {
       return {
@@ -128,15 +128,15 @@
           locationName: '',
           equipmentStatus: '',
           locationStatus: '',
-          community:'',
-          unit:'',
-          floor:'',
-          corridor:'',
-          roomNumber:'',
-          administrator:'',
-          phone:'',
-          remark:'',
-          gmtCreate:''
+          community: '',
+          unit: '',
+          floor: '',
+          corridor: '',
+          roomNumber: '',
+          administrator: '',
+          phone: '',
+          remark: '',
+          gmtCreate: ''
         },
         dataList: [
           {
@@ -150,27 +150,27 @@
             locationName: '',
             equipmentStatus: '',
             locationStatus: '',
-            community:'',
-            unit:'',
-            floor:'',
-            corridor:'',
-            roomNumber:'',
-            administrator:'',
-            phone:'',
-            remark:'',
-            gmtCreate:''
+            community: '',
+            unit: '',
+            floor: '',
+            corridor: '',
+            roomNumber: '',
+            administrator: '',
+            phone: '',
+            remark: '',
+            gmtCreate: ''
           }
         ],
-        searchData:{
-          equipmentName:'',
-          belongTypeName:'',
-          community:''
+        searchData: {
+          equipmentName: '',
+          belongTypeName: '',
+          community: ''
         },
-        BelongTypeList:[],
-        communityList:[],
+        BelongTypeList: [],
+        communityList: [],
         dataListLoading: false,
         addOrUpdateVisible: false,
-        showEquipmentInfo:false,
+        showEquipmentInfo: false,
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0
@@ -194,9 +194,9 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'equipmentName':this.searchData.equipmentName,
-            'belongTypeName':this.searchData.belongTypeName,
-            'community':this.searchData.community
+            'equipmentName': this.searchData.equipmentName,
+            'belongTypeName': this.searchData.belongTypeName,
+            'community': this.searchData.community
           })
         }).then(({data}) => {
           this.dataList = data.page.list
@@ -204,7 +204,7 @@
           this.totalPage = data.page.totalCount
         })
       },
-      showinfor(locationId){
+      showinfor (locationId) {
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl(`/equipment/info/${locationId}`),
@@ -219,27 +219,27 @@
           })
         })
       },
-      //获取所有存在的类型信息
-      getTypelistList(){
-        this.dataListLoading = true;
+      // 获取所有存在的类型信息
+      getTypelistList () {
+        this.dataListLoading = true
         this.$http({
-          url:this.$http.adornUrl('/equipment/typelist'),
+          url: this.$http.adornUrl('/equipment/typelist'),
           method: 'get',
-          params:this.$http.adornParams({
+          params: this.$http.adornParams({
           })
-        }).then( ({data}) =>{
+        }).then(({data}) => {
           this.BelongTypeList = data.page
         })
       },
-      //获取所有存在的类型信息
-      getCommunitylistList(){
-        this.dataListLoading = true;
+      // 获取所有存在的类型信息
+      getCommunitylistList () {
+        this.dataListLoading = true
         this.$http({
-          url:this.$http.adornUrl('/equipment/communitylist'),
+          url: this.$http.adornUrl('/equipment/communitylist'),
           method: 'get',
-          params:this.$http.adornParams({
+          params: this.$http.adornParams({
           })
-        }).then( ({data}) =>{
+        }).then(({data}) => {
           this.communityList = data.page
         })
       },
@@ -247,30 +247,30 @@
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
       },
-      //禁用
-      stopUse(id,status){
+      // 禁用
+      stopUse (id, status) {
         let self = this
         self.$http({
-          url:this.$http.adornUrl(`/location/updateStatus`),
-          method:'post',
-          params:this.$http.adornParams({
-            locationid:id,
-            status:status
+          url: this.$http.adornUrl(`/location/updateStatus`),
+          method: 'post',
+          params: this.$http.adornParams({
+            locationid: id,
+            status: status
           })
         }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
           }
+        }
         )
       },
       // 每页数
@@ -288,7 +288,7 @@
       deleteHandle (id) {
         var ids = new Array()
         ids[0] = id
-        this.$confirm(`确定对其进行【删除】操作?`, '提示', {
+        this.$confirm(`确定要删除吗?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -296,7 +296,7 @@
           this.$http({
             url: this.$http.adornUrl(`/equipment/delete`),
             method: 'post',
-            data: this.$http.adornData(ids,false)
+            data: this.$http.adornData(ids, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({

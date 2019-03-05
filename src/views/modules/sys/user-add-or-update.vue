@@ -5,7 +5,10 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="用户名" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="登录帐号"></el-input>
+        <el-input v-model="dataForm.userName" placeholder="用户名"></el-input>
+      </el-form-item>
+      <el-form-item label="账号" prop="account">
+        <el-input v-model="dataForm.account" placeholder="登录帐号"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
@@ -78,6 +81,7 @@
         dataForm: {
           id: 0,
           userName: '',
+          account: '',
           password: '',
           comfirmPassword: '',
           salt: '',
@@ -89,6 +93,9 @@
         dataRule: {
           userName: [
             { required: true, message: '用户名不能为空', trigger: 'blur' }
+          ],
+          account: [
+            { required: true, message: '账号不能为空', trigger: 'blur' }
           ],
           password: [
             { validator: validatePassword, trigger: 'blur' }
@@ -130,6 +137,7 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
+                this.dataForm.account = data.user.account
                 this.dataForm.salt = data.user.salt
                 this.dataForm.email = data.user.email
                 this.dataForm.mobile = data.user.mobile
@@ -150,6 +158,7 @@
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
                 'username': this.dataForm.userName,
+                'account': this.dataForm.account,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,
                 'email': this.dataForm.email,
