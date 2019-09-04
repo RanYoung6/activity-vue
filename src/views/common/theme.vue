@@ -1,6 +1,6 @@
 <template>
   <el-form>
-    <h2>布局设置</h2>
+    <h2>主题设置</h2>
     <el-form-item label="导航条类型">
       <el-radio-group v-model="navbarLayoutType">
         <el-radio label="default" border>default</el-radio>

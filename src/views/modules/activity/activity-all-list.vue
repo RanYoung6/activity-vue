@@ -73,6 +73,7 @@
         prop="activityName"
         header-align="center"
         align="center"
+        max-width="80"
         label="活动名称">
       </el-table-column>
       <el-table-column
@@ -91,7 +92,7 @@
         prop="state"
         header-align="center"
         align="center"
-        min-width="80"
+        min-width="60"
         label="审批状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.state == 0" size="medium" type="info">初审中</el-tag>
@@ -112,11 +113,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        min-width="100"
+        min-width="130"
         label="操作">
         <template slot-scope="scope">
           <!--<el-button round v-if="isAuth('activity:apply:info')" type="primary" size="mini" @click="showinfor(scope.row.activityId)">详情</el-button>-->
-          <el-button round v-if="isAuth('activity:apply:delete')" type="danger" size="mini" @click="deleteHandle(scope.row.activityId)">删除</el-button>
+          <el-button v-if="isAuth('activity:apply:changeState')" type="success" size="mini" v-bind:disabled="scope.row.state==4||scope.row.verifierNameLast!=dataForm.user" @click="changeState(scope.row.activityId,4)" icon="el-icon-check"></el-button>
+          <el-button v-if="isAuth('activity:apply:changeState')" type="danger" size="mini" v-bind:disabled="scope.row.state==3||scope.row.verifierNameLast!=dataForm.user" @click="changeState(scope.row.activityId,3)" icon="el-icon-close"></el-button>
+          <el-button v-if="isAuth('activity:apply:delete')" type="danger" size="mini" @click="deleteHandle(scope.row.activityId)" icon="el-icon-delete"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -130,7 +133,7 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <showActivityInfo v-if="showActivityInfo" ref="showActivityInfo" @refreshDataList="getDataList"></showActivityInfo>
+    <!--<showActivityInfo v-if="showActivityInfo" ref="showActivityInfo" @refreshDataList="getDataList"></showActivityInfo>-->
   </div>
 </template>
 <style>
@@ -147,8 +150,9 @@
     width: 50%;
   }
 </style>
+
 <script>
-  import showActivityInfo from './activity-info'
+  // import showActivityInfo from './activity-info'
   export default {
     data () {
       return {
@@ -197,34 +201,36 @@
         dataListLoading: false,
         addOrUpdateVisible: false,
         dataListSelections: [],
-        showActivityInfo: false,
+        // showActivityInfo: false,
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0
       }
     },
-    components: {
-      showActivityInfo
-    },
+    // components: {
+    //   showActivityInfo
+    // },
     activated () {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
       getDataList () {
+        debugger
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/activity/apply/personallist'),
+          url: this.$http.adornUrl('/activity/apply/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'userId':this.$store.state.user.id,
             'page': this.pageIndex,
-            'limit': this.pageSize
+            'limit': this.pageSize,
+            'activityName': this.searchData.activityName
           })
         }).then(({data}) => {
-          this.dataList = data.page
+          this.dataList = data.page.list
           this.dataListLoading = false
           this.totalPage = data.page.totalCount
+          this.dataListLoading = false
         })
       },
       // showinfor (activityId) {
@@ -242,6 +248,37 @@
       //     })
       //   })
       // },
+      // 通过及驳回审批
+      changeState (activityId,state) {
+        this.$confirm(`确定审核这条活动申请吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() =>{
+          this.$http({
+            url: this.$http.adornUrl(`/activity/apply/changeState`),
+            method: 'post',
+            params: this.$http.adornParams({
+              'activityId': activityId,
+              'state': state
+            })
+          }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.getDataList()
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            }
+          )
+        })
+      },
       // 新增 / 修改
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true

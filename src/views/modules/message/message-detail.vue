@@ -56,12 +56,6 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <el-form label-width="150px" :rules="dataRules"  ref="dataForm" :model="dataForm">
-      <el-form-item label="确认设备编码：" prop="equipmentId">
-        <el-input v-model="dataForm.equipmentId" readonly="readonly" style="width:535px"></el-input>
-        <el-button @click="getequipmentId" type="primary">生成编码</el-button>
-      </el-form-item>
-    </el-form>
 
     <el-form :inline="true" label-width="150px" :rules="dataRules" ref="dataForm" :model="dataForm">
       <el-form-item label="小区：">
@@ -86,15 +80,6 @@
         <el-input v-model="dataForm.phone" ></el-input>
       </el-form-item>
     </el-form>
-   <!-- <el-form label-width="150px">
-      <el-form-item label="备注信息：" style="width:750px">
-        <el-input
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="请输入内容"
-          v-model="dataForm.remark" ></el-input>
-      </el-form-item>
-    </el-form>-->
     <span slot="footer" class="dialog-footer">
       <el-button @click="dataFormCancel()">取消</el-button>
       <el-button type="primary" @click="updateall()">确定</el-button>
@@ -103,12 +88,10 @@
 </template>
 
 <script>
-  import { treeDataTranslate } from '@/utils'
   export default {
     data () {
       return {
         visible: false,
-        choesLocation: '',
         oldequipmentId: '',
         dataForm: {
           equipmentId: '',
@@ -198,15 +181,7 @@
         this.oldequipmentId = dataForm.equipmentId
         this.visible = true
       },
-      gettypelist () {
-        this.$http({
-          url: this.$http.adornUrl('/category/list'),
-          method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.menuList = treeDataTranslate(data.page.list, 'typeId', 'typePid')
-        })
-      },
+
       // 菜单树选中
       menuListTreeCurrentChangeHandle (data, node) {
         this.typeForm.categoryId = data.typeId

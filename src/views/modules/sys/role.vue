@@ -12,7 +12,6 @@
     </el-form>
     <el-table
       :data="dataList"
-      border
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">

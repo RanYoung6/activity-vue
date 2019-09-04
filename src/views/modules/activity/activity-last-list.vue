@@ -23,22 +23,22 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="活动编号：">
+            <el-form-item label="活动编号">
               <span>{{ props.row.activityId }}</span>
             </el-form-item>
-            <el-form-item label="活动名称：">
+            <el-form-item label="活动名称">
               <span>{{ props.row.activityName }}</span>
             </el-form-item>
-            <el-form-item label="组织名称：">
+            <el-form-item label="组织名称">
               <span>{{ props.row.applyer }}</span>
             </el-form-item>
-            <el-form-item label="活动负责人：">
+            <el-form-item label="活动负责人">
               <span>{{ props.row.principal }}</span>
             </el-form-item>
-            <el-form-item label="负责人联系方式:">
+            <el-form-item label="负责人联系方式">
               <span>{{ props.row.principalTel }}</span>
             </el-form-item>
-            <el-form-item label="活动地点：">
+            <el-form-item label="活动地点">
               <span>{{ props.row.site }}</span>
             </el-form-item>
             <el-form-item label="活动时间：">
@@ -47,16 +47,16 @@
             <el-form-item label="申请时间：">
               <span>{{ props.row.createTime }}</span>
             </el-form-item>
-            <el-form-item label="活动介绍：" style="width: 100%">
+            <el-form-item label="活动介绍" style="width: 100%">
               <span>{{ props.row.description }}</span>
             </el-form-item>
-            <el-form-item label="活动预算：" style="width: 100%">
+            <el-form-item label="活动预算" style="width: 100%">
               <span>{{ props.row.budget }}</span>
             </el-form-item>
-            <el-form-item label="初审人：">
+            <el-form-item label="初审人">
               <span>{{ props.row.verifierNameFirst }}</span>
             </el-form-item>
-            <el-form-item label="复审人：">
+            <el-form-item label="复审人">
               <span>{{ props.row.verifierNameLast }}</span>
             </el-form-item>
           </el-form>
@@ -115,8 +115,9 @@
         min-width="100"
         label="操作">
         <template slot-scope="scope">
-          <!--<el-button round v-if="isAuth('activity:apply:info')" type="primary" size="mini" @click="showinfor(scope.row.activityId)">详情</el-button>-->
-          <el-button round v-if="isAuth('activity:apply:delete')" type="danger" size="mini" @click="deleteHandle(scope.row.activityId)">删除</el-button>
+          <!--<el-button round v-if="isAuth('activity:apply:delete')" type="danger" size="mini" @click="deleteHandle(scope.row.activityId)">删除</el-button>-->
+          <el-button round v-if="isAuth('activity:apply:changeState')" type="primary" size="mini" @click="changeState(scope.row.activityId,4)">通过</el-button>
+          <el-button round v-if="isAuth('activity:apply:changeState')" type="danger" size="mini" @click="changeState(scope.row.activityId,3)">驳回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,8 +130,8 @@
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!-- 弹窗, 新增 / 修改 -->
-    <showActivityInfo v-if="showActivityInfo" ref="showActivityInfo" @refreshDataList="getDataList"></showActivityInfo>
+    <!--&lt;!&ndash; 弹窗, 新增 / 修改 &ndash;&gt;-->
+    <!--<showActivityInfo v-if="showActivityInfo" ref="showActivityInfo" @refreshDataList="getDataList"></showActivityInfo>-->
   </div>
 </template>
 <style>
@@ -138,7 +139,7 @@
     font-size: 0;
   }
   .demo-table-expand label {
-    width: 130px;
+    width: 150px;
     color: #99a9bf;
   }
   .demo-table-expand .el-form-item {
@@ -214,10 +215,11 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/activity/apply/personallist'),
+          url: this.$http.adornUrl('/activity/apply/lastlist'),
           method: 'get',
           params: this.$http.adornParams({
-            'userId':this.$store.state.user.id,
+            'lastId':this.$store.state.user.id,
+            'state':2,
             'page': this.pageIndex,
             'limit': this.pageSize
           })
@@ -225,6 +227,7 @@
           this.dataList = data.page
           this.dataListLoading = false
           this.totalPage = data.page.totalCount
+          console.log(this.dataList)
         })
       },
       // showinfor (activityId) {
@@ -252,6 +255,38 @@
       // 多选
       selectionChangeHandle (val) {
         this.dataListSelections = val
+      },
+      // 通过
+      changeState (activityId,state) {
+        this.$confirm(`确定审核这条活动申请吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() =>{
+
+          this.$http({
+            url: this.$http.adornUrl(`/activity/apply/changeState`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'activityId':activityId,
+              'state': state
+            })
+          }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.getDataList()
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            }
+          )
+        })
       },
       // 每页数
       sizeChangeHandle (val) {

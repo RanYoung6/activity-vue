@@ -13,6 +13,8 @@
     <el-table
       :data="dataList"
       border
+      stripe
+      height="400"
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
@@ -36,21 +38,28 @@
         label="用户名">
       </el-table-column>
       <el-table-column
-        prop="email"
+        prop="account"
         header-align="center"
         align="center"
-        label="邮箱">
+        label="登录账号">
       </el-table-column>
-      <el-table-column
-        prop="mobile"
-        header-align="center"
-        align="center"
-        label="手机号">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="email"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="邮箱">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="mobile"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="手机号">-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
+        width="80"
         label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
@@ -116,6 +125,7 @@
     methods: {
       // 获取数据列表
       getDataList () {
+        debugger
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/sys/user/list'),

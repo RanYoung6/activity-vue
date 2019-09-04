@@ -116,8 +116,9 @@
       width: 100%;
       height: 100%;
       content: "";
-      background-image: url(~@/assets/img/loginBg.jpg);
-      background-size: cover;
+      background-color: #11C26D;
+      /*background-image: url(~@/assets/img/loginBg.jpg);*/
+      /*background-size: cover;*/
     }
     .site-content__wrapper {
       position: absolute;
@@ -141,14 +142,14 @@
     }
     .brand-info__text {
       margin:  0 0 22px 0;
-      font-size: 48px;
+      font-size: 32px;
       font-weight: 500;
       text-transform : uppercase;
       font-family: "Arial","Microsoft YaHei","微软雅黑","宋体",sans-serif;
     }
     .brand-info__intro {
       margin: 10px 0;
-      font-size: 21px;
+      font-size: 24px;
       line-height: 1.58;
       opacity: .6;
 
@@ -159,10 +160,11 @@
       right: 360px;
       padding: 50px 40px 100px;
       width: 400px;
-      background: -webkit-linear-gradient(top, rgba(19, 80, 100, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+      background-color: white;
+      /*background: -webkit-linear-gradient(top, rgba(19, 80, 100, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);*/
     }
     .login-title {
-      color: #fff;
+      color: #11C26D;
       font-weight: normal;
       letter-spacing: 20px;
     }
@@ -176,6 +178,10 @@
     .login-btn-submit {
       width: 100%;
       margin-top: 38px;
+      font-size: 24px;
+    }
+    .el-input__inner{
+      font-size: 20px;
     }
   }
 </style>

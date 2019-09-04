@@ -7,7 +7,7 @@
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="dataForm.userName" placeholder="用户名"></el-input>
       </el-form-item>
-      <el-form-item label="账号" prop="account">
+      <el-form-item label="登录账号" prop="account">
         <el-input v-model="dataForm.account" placeholder="登录帐号"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password" :class="{ 'is-required': !dataForm.id }">
